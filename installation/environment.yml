@@ -1,0 +1,32 @@
+# Conda environment for NP4Buoyancy
+#
+# Create (GPU, CUDA 12.1 build) — run from the repository root:
+#     conda env create -f installation/environment.yml
+#     conda activate np4buoyancy
+#
+# CPU-only machine: delete the `pytorch-cuda` line and the `nvidia` channel,
+# then create the environment as above (PyTorch will install its CPU build).
+#
+# Verify:
+#     python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
+
+name: np4buoyancy
+
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+
+dependencies:
+  - python=3.10
+  # --- core differentiable solver ---
+  - pytorch>=2.3          # uses dist.init_process_group(device_id=...) -> needs >= 2.3
+  - pytorch-cuda=12.1     # GPU build; remove this line for a CPU-only install
+  # --- numerics / IO / plotting ---
+  - numpy>=1.23
+  - scipy>=1.9            # scipy.interpolate.RegularGridInterpolator (restart/interp)
+  - pyyaml>=6.0           # configuration.yaml parsing
+  - matplotlib>=3.6       # monitor / postprocess / inversion plots
+  # --- notebook (optional, for notebooks/NP4Buoyancy_intro.ipynb) ---
+  - jupyterlab
+  - ipykernel
